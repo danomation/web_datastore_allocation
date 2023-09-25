@@ -1,0 +1,494 @@
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&display=swap" rel="stylesheet"> 
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mono&display=swap" rel="stylesheet"> 
+<link href="https://fonts.googleapis.com/css2?family=Bevan&display=swap" rel="stylesheet"> 
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial;
+  font-size: 1.4vh;
+  background-color: black;
+}
+
+#videobackground {
+  position: fixed;
+  bottom: 0vh;
+  right: 0vh;
+  min-height: 100vh;
+  min-width: 100vw;
+  max-width: 380vw;
+  max-height: 380vh;
+}
+input {
+text-align: center;
+border-radius: 10px;
+}
+#footer {
+  position: fixed;
+  bottom: 0vh;
+  width: 100vw;
+  height: 12vh;
+  padding-left: 1vw;
+  color: white;
+}
+#logo {
+  font-family: 'Bevan', cursive;
+  font-size: 4vh;
+  color: #aaa;
+}
+#main {
+	font-family: 'Bevan', cursive;
+	font-size: 3vh;
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    width: 100vw;
+	height: 70vh;
+	margin-top: -35vh;
+	margin-left: -50vw;
+    background: rgba(0, 0, 0, .5);
+	border-radius: 5vh;
+	font-size: 2vh;
+	padding: 3vh;
+	text-align: center;
+  color: #ddd;
+  text-shadow:
+  0 0 .2vw #000;
+}
+tr {
+}
+td {
+	font-family: 'Bevan', cursive;
+    font-size:2vh;
+	width: 10vw;
+	text-align: left;
+	padding: 1.5vw;
+	padding-left: 6vw;
+}
+input {
+	background: #aaa;
+	font-family: 'Bevan', cursive;
+}
+input:hover {
+	background: #eee;
+	font-family: 'Bevan', cursive;
+}
+#datastore_size {
+	width: 80px;
+	resize: none;
+	overflow-y: hidden;
+
+}
+#datastore_used {
+	width: 80px;
+	resize: none;
+	overflow-y: hidden;
+}
+#requested {
+	width: 80px;
+	resize: none;
+	overflow-y: hidden;
+}
+#request_storage {
+	width: 80px;
+	resize: none;
+	overflow-y: hidden;
+}
+#calculate {
+	display: none;
+}
+#footer {
+	text-shadow:
+		0 0 .2vw #000;
+}
+#footer_links:hover {
+  font-family: 'Noto Sans Mono', monospace;
+  text-decoration: none;
+  color: black;
+  padding-left: 1vh;
+  text-shadow:
+      0 0 1vw #000,
+      0 0 2vw #000,
+      0 0 3vw #000,
+      0 0 4vw #000;
+
+}
+a:visited {
+  color: #000;
+}
+a:link {
+  color: #000;
+}
+::-webkit-scrollbar {
+    height: 12px;
+    width: 12px;
+    background: #000;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #000;
+    -webkit-border-radius: 1ex;
+    -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+}
+
+::-webkit-scrollbar-corner {
+    background: #000;
+}
+#splash {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+  top: 0vh;
+  text-align: center;
+  font-family: 'Bevan', cursive;
+  font-size: 5vw;
+  background: #2a52be;
+  color: #aaa;
+  text-shadow:
+  0 0 .2vw #000;
+}
+button {
+	border-radius: 10px;
+	font-family: 'Bevan', cursive;
+    padding: 1vh;
+	font-size: 1.4 vw;
+	border: none;
+	color: white;
+	background-color: #ddd;
+	  text-shadow:
+	0 0 .2vw #555;
+}
+button:hover {
+	border-radius: 10px;
+	font-family: 'Bevan', cursive;
+    padding: 1vh;
+	font-size: 1.4 vw;
+	border: none;
+	color: #555;
+	background-color: #aaa;
+	  text-shadow:
+	  0 0 .2vw #999;
+}
+button:active {
+	border-radius: 10px;
+	font-family: 'Bevan', cursive;
+    padding: 1vh;
+	font-size: 1.4 vw;
+	border: none;
+	color: black;
+	background-color: #2a52be;
+	  text-shadow:
+	  0 0 .2vw #555;
+}
+
+</style><title>Datastore Alloc</title>
+</head>
+<body>
+<div id="splash">
+	<div id="intro">Datastore Alloc v 0.2</div>
+	</div>
+</div>
+<div id="init" style="display:none">
+	<video onloadstart="this.playbackRate=1;" playsinline autoplay muted loop disablepictureinpicture id="videobackground">
+		<source src="./background.mp4" type="video/mp4">
+		  Your browser does not support HTML5 video.
+	</video>
+	<div id="holder">
+	    <table id="main">
+		<tr>
+			<td>Input</td><td></td><td>Output</td>
+		</tr>
+		<tr>
+			<td>Current Datastore<br/> Size: </td>
+			<td><input id="size" value="0"><input id="datastore_size" onclick=""> <button id="tdsize_button_tb">TB</button> <button id="tdsize_button_gb">GB</button> <button id="tdsize_button_reset">x</button></td>
+			<td>Ask for Storage (nearest 10GB): </td><td><input id="request_storage" onclick="" value=""></td>
+		</tr>
+		<tr>
+			<td>Current Datastore<br/> Used: </td>
+			<td><input id="used" value="0"><input id="datastore_used" onclick=""> <button id="tdused_button_tb">TB</button> <button id="tdused_button_gb">GB</button> <button id="tdused_button_reset">x</button></td>
+		</tr>
+		<tr>
+			<td>Total requested VMDK size: </td>
+			<td><input id="req" value="0"><input id="requested" onclick=""> <button id="tdreq_button_tb">TB</button> <button id="tdreq_button_gb">GB</button> <button id="tdreq_button_reset">x</button></td>
+		</tr>
+		<tr>
+			<td><button id="reset" onclick="reset();">reset</button></td>
+			<td><button id="calculate" onclick="">calculate</button></td>
+		</tr>
+		<tr>
+		<td>VMware uses base 2</td>
+		<td>1 TB = 1024 GB</td>
+		<td>1 GB = 1024 MB</td>
+		<td>20% Overhead</td>
+		</tr>
+		</table>
+		<br/>
+	</div>
+	
+	<div id="footer">
+		<div id="logo"> <br/>Datastore Alloc</div>
+	</div>
+	
+</div>
+</div>
+<script>
+$( document ).ready(function(){
+    $.ajaxSetup({
+        cache: false,
+    });
+
+$("#reset").click(function(){
+	$("#datastore_size").val("")
+	$("#datastore_used").val("")
+	$("#requested").val("")
+	$("#request_storage").val("N/A")
+	$("#request_storage").css("background-color","#aaa");
+	
+	//reset the gb/tb buttons and values
+	$("#tdsize_button_reset").hide();
+	$("#tdsize_button_tb").show();
+	$("#tdsize_button_gb").show();
+    $("#datastore_size").hide();
+	$("#datastore_size").val("");
+	$("#size").val("0");
+	
+	$("#tdused_button_reset").hide();
+	$("#tdused_button_tb").show();
+	$("#tdused_button_gb").show();
+	$("#datastore_used").hide();
+	$("#datastore_used").val("");
+	$("#used").val("0");
+	
+	$("#tdreq_button_reset").hide();
+	$("#tdreq_button_tb").show();
+	$("#tdreq_button_gb").show();
+	$("#requested").hide();
+	$("#requested").val("");
+	$("#req").val("0");
+});
+
+//clear output values on change.
+$("#datastore_size").change(function(){
+    $("#request_storage").val("N/A");
+	$("#request_storage").css("background-color","#aaa");
+});
+$("#datastore_used").change(function(){
+    $("#request_storage").val("N/A");
+	$("#request_storage").css("background-color","#aaa");
+});
+$("#requested").change(function(){
+    $("#request_storage").val("N/A");
+	$("#request_storage").css("background-color","#aaa");
+});
+
+//size gb/tb selection
+$("#tdsize_button_reset").click(function(){
+    $("#request_storage").val("N/A");
+	$("#request_storage").css("background-color","#aaa");
+	$("#tdsize_button_reset").hide();
+	$("#tdsize_button_tb").show();
+	$("#tdsize_button_gb").show();
+    $("#datastore_size").hide();
+	$("#datastore_size").val("");
+	//this is a pretty hacky way of setting a variable but honestly it's easier because of how javascript handles them. 
+	//An input variable changes every time its called where an input value is constant.
+	$("#size").val("0");
+});
+
+	
+$("#tdsize_button_tb").click(function(){
+	$("#tdsize_button_reset").show();
+	//$("#tdsize_button_tb").hide();
+	$("#tdsize_button_gb").hide();
+	$("#datastore_size").show();
+	$("#datastore_size").val("");
+	$("#size").val("1");
+});
+
+$("#tdsize_button_gb").click(function(){
+	$("#tdsize_button_reset").show();
+	$("#tdsize_button_tb").hide();
+	//$("#tdsize_button_gb").hide();
+	$("#datastore_size").show();
+	$("#datastore_size").val("");
+	$("#size").val("0");
+});
+
+//used gb/tb selection
+$("#tdused_button_reset").click(function(){
+    $("#request_storage").val("N/A");
+	$("#request_storage").css("background-color","#aaa");
+	$("#tdused_button_reset").hide();
+	$("#tdused_button_tb").show();
+	$("#tdused_button_gb").show();
+	$("#datastore_used").hide();
+	$("#datastore_used").val("");
+	$("#used").val("0");
+});
+
+$("#tdused_button_tb").click(function(){
+	$("#tdused_button_reset").show();
+	//$("#tdused_button_tb").hide();
+	$("#tdused_button_gb").hide();
+	$("#datastore_used").show();
+	$("#datastore_used").val("");
+	$("#used").val("1");
+});
+
+$("#tdused_button_gb").click(function(){
+	$("#tdused_button_reset").show();
+	$("#tdused_button_tb").hide();
+	//$("#tdused_button_gb").hide();
+	$("#datastore_used").show();
+	$("#datastore_used").val("");
+	$("#used").val("0");
+});
+
+//requested_size gb/tb selection
+
+$("#tdreq_button_reset").click(function(){
+    $("#request_storage").val("N/A");
+	$("#request_storage").css("background-color","#aaa");
+	$("#tdreq_button_reset").hide();
+	$("#tdreq_button_tb").show();
+	$("#tdreq_button_gb").show();
+	$("#requested").hide();
+	$("#requested").val("");
+	$("#req").val("0");
+});
+
+$("#tdreq_button_tb").click(function(){
+	$("#tdreq_button_reset").show();
+	//$("#tdreq_button_tb").hide();
+	$("#tdreq_button_gb").hide();
+	$("#requested").show();
+	$("#requested").val("");
+	$("#req").val("1");
+});
+
+$("#tdreq_button_gb").click(function(){
+	$("#tdreq_button_reset").show();
+	$("#tdreq_button_tb").hide();
+	//$("#tdreq_button_gb").hide();
+	$("#requested").show();
+	$("#requested").val("");
+	$("#req").val("0");
+});
+
+
+//end of gb/tb selection
+
+$("#datastore_size").val("");
+$("#datastore_used").val("");
+$("#requested").val("");
+$("#request_storage").val("N/A");
+$("#request_storage").css("background-color","#aaa");
+
+//animation
+
+$("#request_storage").val("N/A");
+$("#main").hide();
+$("#datastore_size").hide();
+$("#datastore_used").hide();
+$("#requested").hide();
+$("#tdsize_button_reset").hide();
+$("#tdused_button_reset").hide();
+$("#tdreq_button_reset").hide();
+$("#size").hide();
+$("#used").hide();
+$("#req").hide();
+$("#request_storage").hide();
+$("#calculate").hide();
+$("#footer").hide();
+$("#videobackground").hide();
+$("#init").show();
+
+
+$("#splash").fadeOut(1000);
+$("#videobackground").delay(100).fadeIn(1000);
+$("#main").delay(1000).fadeIn(1000);
+//$("#datastore_size").fadeIn(1500);
+//$("#datastore_used").fadeIn(1500);
+//$("#requested").fadeIn(1500);
+$("#request_storage").fadeIn(1500);
+$("#calculate").fadeIn(1500);
+$("#footer").delay(1500).fadeIn(1000);
+
+$("#calculate").click(function(){
+    if($("#datastore_size").val() == "" || $("#datastore_used").val() == "" || $("#requested").val() == ""){
+		$("#main").effect("shake");
+	}
+	$("#request_storage").css("background-color", "#aaa");
+    $("#request_storage").val("N/A")
+	var size = parseFloat($("#datastore_size").val());
+	var used = parseFloat($("#datastore_used").val());
+	var request = parseFloat($("#requested").val());
+
+	//convert to gigabytes
+	
+	if($("#size").val() == 1){
+		size = parseFloat(size) * 1024.0;
+	}
+	else{
+		size = parseFloat(size);
+	}
+	
+	if($("#used").val() == 1){
+		used = parseFloat(used) * 1024.0;
+	}
+	else{
+		used = parseFloat(used);
+	}	
+
+	if($("#req").val() == 1){
+		request = parseFloat(request) * 1024.0;
+	}
+	else{
+		request = parseFloat(request);
+	}
+	
+	if(used >= size){
+		$("#main").effect("shake");
+	}
+	if(request <= 0){
+		$("#main").effect("shake");
+	}
+	// if valid continue
+	if((used < size) && (request > 0)){
+		var minimum = (parseFloat(used) + parseFloat(request)) * 1.25;
+		
+		if(minimum <= size){
+		    $("#request_storage").css("background-color", "green");
+			$("#request_storage").val("None")
+		}
+		else{
+			if(minimum > size){
+				required = parseFloat(minimum) - parseFloat(size);
+				required = Math.ceil(required / 10) * 10;
+				$("#request_storage").css("background-color", "#ffcccb");
+				$("#request_storage").val(required);
+			}
+			
+		}
+	}
+});
+
+
+
+});
+
+</script>
+</body>
